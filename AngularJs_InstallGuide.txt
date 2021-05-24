@@ -1,0 +1,46 @@
+#Antes de instalar Angular, debemos instalar node.js desde official site
+-En en CLI de GitBash ejecutar la siguiente linea:
+npm install -g @angular/cli@8.1.3 (si queremos la ultima version, quitar @8.1.3)
+-Para visualizar la version ejecutar: ng version
+-Para crear un nuevo proyecto, lo hacemos desde el CLI de GitBash con:
+ng new <nombre de la aplicacion>
+-Para depurar (correr la aplicación) desde Nueva Terminal de VS Code 2:Git Bash
+-ir a la ubicación del proyecto (rama master) y ejecutar los siguiente:
+npm start
+-Luego Ctrl-Click sobre localhost:4200
+###############################################################################
+Desde el GitBash rama (master) ejecutar:
+-ng generate module core (Crea un módulo core - contiene todos los archivos que necesariamente se van a cargar)
+-ng generate module data (Crea un módulo data - aquí van todos los datos, debe ir pero no se hace el import en el app.modules.ts)
+-ng generate module shared (Crea un módulo shared)
+#Buenas prácticas es crear desde el directorio de VS Code las carpetas constants, interfaces, schema y services en el módulo "data".
+-Dentro de services, se crea carpeta "api" (donde se añaden todos los servicios del api como "obtener usuario", "actualizar usuario")
+-<<Opcional>> carpeta "mocks" en "data" (en caso de trabajo grupal, aquí resuelve cargar datos backend hasta que el team se alinee)
+-En la raíz "app" crear carpetas "layout" y "modules"
+-En "shared" crear carpetas "components", "services"
+-Luego en el archivo app.modules.ts se debe importar: CoreModule, SharedModule,
+y en la parte de providers escribir:
+{
+	provide: LocationStrategy,
+	useClass: PathLocationStrategy
+} /*que sirve para quitar el signo de gato que angular pone automáticamente a las rutas*/
+-En shared/sharedmodule.ts añadir en los imports: FormsModule, ReactiveFormsModule
+luego HttpClientModule, pero arriba en los imports añadir: import { HttpClientModule } from '@angular/common/http';
+-Crear una propiedad exports: y añadir las mismas lineas del imports.
+-Por último declaración de componentes: Creamos un archivo index.ts dentro de shared/components
+-Dentro de este archivo poner la línea: export const components: any [] = [];
+-Dentro de archivo shared.module.ts: import * as fromComponents from './components';
+en declarations [...fromComponents.components] y lo mismo en exports:
+-en archivo app-routing.module.ts añadimos a la sentencia añadimos del forRoot: ,{useHash: true}
+para quitar el signo de gato que pone angular por defecto
+###############################################################################
+-Importante dar alias a las carpetas, en el archivo tsconfig.json, para evitar escribir largas rutas
+"paths":{
+	"@core/*": ["app/core/*"],
+	"@shared/*": ["app/shared/*"],
+	"@components/*": ["app/shared/*"],
+	"@env/*": ["environment/*"],
+	"@data/*": ["app/data/*"],
+	"@layout/*": ["app/layout/*"]
+}
+-en baseUrl cambiar popr ./src
